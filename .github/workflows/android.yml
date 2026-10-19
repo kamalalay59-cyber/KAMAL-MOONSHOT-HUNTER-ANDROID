@@ -32,41 +32,25 @@ jobs:
 
       - name: Install Android SDK packages
         run: |
-          sdkmanager --install \
-            "platform-tools" \
-            "platforms;android-35" \
-            "build-tools;35.0.0"
+          sdkmanager --install "platform-tools"
+          sdkmanager --install "platforms;android-35"
+          sdkmanager --install "build-tools;35.0.0"
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: "8.9"
 
       - name: Build debug APK
         working-directory: android-app
         run: gradle --no-daemon assembleDebug
 
       - name: Find generated APK
-        id: find_apk
-        shell: bash
         run: |
-          echo "Searching for APK files..."
           find android-app -type f -name "*.apk" -print
-
-          APK="android-app/app/build/outputs/apk/debug/app-debug.apk"
-
-          if [ ! -f "$APK" ]; then
-            echo "::error::APK not found at expected path."
-            exit 1
-          fi
-
-          echo "apk_path=$APK" >> "$GITHUB_OUTPUT"
-          ls -lh "$APK"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: KAMAL-MOONSHOT-HUNTER-APK
-          path: ${{ steps.find_apk.outputs.apk_path }}
+          path: android-app/**/build/outputs/apk/**/*.apk
           if-no-files-found: error
           retention-days: 14
