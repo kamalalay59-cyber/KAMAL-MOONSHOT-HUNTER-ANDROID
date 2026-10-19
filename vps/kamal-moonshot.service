@@ -1,0 +1,28 @@
+[Unit]
+Description=Kamal Moonshot local PAPER scanner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=kamal-scanner
+Group=kamal-scanner
+WorkingDirectory=/opt/kamal-moonshot-local
+EnvironmentFile=/etc/kamal-moonshot-scanner.env
+ExecStart=/usr/bin/node /opt/kamal-moonshot-local/server.mjs
+Restart=always
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+ReadWritePaths=/var/lib/kamal-moonshot-scanner
+
+[Install]
+WantedBy=multi-user.target
