@@ -1,3 +1,4 @@
+
 name: Build KAMAL MOONSHOT HUNTER APK
 
 on:
@@ -28,7 +29,9 @@ jobs:
           java-version: "17"
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: ""
 
       - name: Install Android SDK packages
         run: |
